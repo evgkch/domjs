@@ -1,14 +1,8 @@
-export type HTMLElementKey<K extends keyof HTMLElementTagNameMap> =
-    keyof HTMLElementTagNameMap[K];
+export type DOMElementProps<K extends HTMLElement | SVGElement> =
+    & { useRef?: (self: K) => any }
+    & { [key in string]: any };
 
-export type HTMLElementProp<K extends keyof HTMLElementTagNameMap> =
-    HTMLElementTagNameMap[K][Extract<keyof HTMLElementTagNameMap[K], string>];
-
-export type HTMLElementProps<K extends keyof HTMLElementTagNameMap> =
-    & { setRef?: (self: HTMLElementTagNameMap[K]) => any }
-    & { [key in HTMLElementKey<K>]?: HTMLElementProp<K> };
-
-export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: HTMLElementProps<K>, children?: (HTMLElement | SVGSVGElement)[]) {
+export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElement>, children?: (HTMLElement | SVGSVGElement)[]) {
     const element = html.create(tagName);        
     if (props)
         html.attr(element, props);
@@ -20,56 +14,46 @@ export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: 
 html.create = <K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K] =>
     document.createElement(tagName);
 
-html.attr = <K extends keyof HTMLElementTagNameMap>(target: HTMLElementTagNameMap[K], props: HTMLElementProps<K>): HTMLElementTagNameMap[K] => {
-    if (props.setRef)
+html.attr = <K extends HTMLElement>(target: K, props: DOMElementProps<HTMLElement>): K => {
+    if (props.useRef)
     {
-        props.setRef(target);
-        delete props.setRef;        
+        props.useRef(target);
+        delete props.useRef;        
     }    
     for (let key in props)
-        target[(<HTMLElementKey<K>> key)] = <HTMLElementProp<K>> props[(<HTMLElementKey<K>> key)];
+        target.setAttribute(key, props[key].toString());
     return target;
 };
 
-html.append = <K extends keyof HTMLElementTagNameMap>(target: HTMLElementTagNameMap[K], children: (HTMLElement | SVGSVGElement)[]): HTMLElementTagNameMap[K] => {
+html.append = <K extends HTMLElement>(target: K, children: (HTMLElement | SVGSVGElement)[]): K => {
     children.forEach(child => target.appendChild(child));
     return target;
 };
 
-export type SVGElementKey<K extends keyof SVGElementTagNameMap> =
-    keyof SVGElementTagNameMap[K];
-
-export type SVGElementProp<K extends keyof SVGElementTagNameMap> =
-    SVGElementTagNameMap[K][Extract<keyof SVGElementTagNameMap[K], string>];
-
-export type SVGElementProps<K extends keyof SVGElementTagNameMap> =
-    & { setRef?: (self: SVGElementTagNameMap[K]) => any }
-    & { [key in SVGElementKey<K>]?: SVGElementProp<K> };
-
-export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: SVGElementProps<K>, children?: SVGElement[]) {
+export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElement>, children?: SVGElement[]) {
     const element = svg.create(tagName);        
     if (props)
         svg.attr(element, props);
     if (children)
-        svg.append(element, children);
+        svg.append(element, children);        
     return element;
 }
 
 svg.create = <K extends keyof SVGElementTagNameMap>(tagName: K): SVGElementTagNameMap[K] =>
     document.createElementNS('http://www.w3.org/2000/svg', tagName);
 
-svg.attr = <K extends keyof SVGElementTagNameMap>(target: SVGElementTagNameMap[K], props: SVGElementProps<K>): SVGElementTagNameMap[K] => {
-    if (props.setRef)
+svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps<SVGElement>): K => {
+    if (props.useRef)
     {
-        props.setRef(target);
-        delete props.setRef;        
+        props.useRef(target);
+        delete props.useRef;        
     }    
     for (let key in props)
-        target[(<SVGElementKey<K>> key)] = <SVGElementProp<K>> props[(<SVGElementKey<K>> key)];
+        target.setAttribute(key, props[key].toString());
     return target;
 };
 
-svg.append = <K extends keyof SVGElementTagNameMap>(target: SVGElementTagNameMap[K], children: SVGElement[]): SVGElementTagNameMap[K] => {
+svg.append = <K extends SVGElement>(target: K, children: SVGElement[]): K => {
     children.forEach(child => target.appendChild(child));
     return target;
 };
