@@ -1,0 +1,30 @@
+{
+  "name": "domjs",
+  "version": "1.0.0",
+  "description": "\"Create and manipulate html and svg elements by js\"",
+  "main": "dist/index.js",
+  "browser": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evgkch/domjs.git"
+  },
+  "devDependencies": {
+    "typescript": "~4.3.5"
+  },
+  "keywords": [
+    "dom",
+    "domjs",
+    "html",
+    "svg"
+  ],
+  "author": "Evgeny Kucherenko <evg.kch@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/evgkch/domjs/issues"
+  },
+  "homepage": "https://github.com/evgkch/domjs#readme"
+}
