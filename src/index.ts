@@ -30,6 +30,10 @@ html.append = <K extends HTMLElement>(target: K, children: (HTMLElement | SVGSVG
     return target;
 };
 
+html.remove = <K extends HTMLElement>(target: K): void => {
+    target.parentElement?.removeChild(target);
+};
+
 export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElementTagNameMap[K]>, children?: SVGElement[]) {
     const element = svg.create(tagName);        
     if (props)
@@ -56,4 +60,8 @@ svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps<K>): K => {
 svg.append = <K extends SVGElement>(target: K, children: SVGElement[]): K => {
     children.forEach(child => target.appendChild(child));
     return target;
+};
+
+svg.remove = <K extends SVGElement | HTMLElement>(target: K): void => {
+    target.parentElement?.removeChild(target);
 };
