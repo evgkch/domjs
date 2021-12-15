@@ -1,4 +1,4 @@
-export declare type DOMElementProps<K extends HTMLElement | SVGElement> = {
+export declare type DOMElementProps<K extends HTMLElement | SVGElement | Element> = {
     useRef?: (self: K) => any;
 } & {
     [key in string]: any;
