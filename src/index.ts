@@ -1,8 +1,8 @@
-export type DOMElementProps =
-    & { useRef?: <K>(self: K) => any }
+export type DOMElementProps<K> =
+    & { useRef?: (self: K) => any }
     & { [key in string]: any };
 
-export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps, children?: (HTMLElement | SVGSVGElement)[]) {
+export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]>, children?: (HTMLElement | SVGSVGElement)[]) {
     const element = html.create(tagName);        
     if (props)
         html.attr(element, props);
@@ -14,7 +14,7 @@ export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: 
 html.create = <K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K] =>
     document.createElement(tagName);
 
-html.attr = <K extends HTMLElement>(target: K, props: DOMElementProps): K => {
+html.attr = <K extends HTMLElement>(target: K, props: DOMElementProps<K>): K => {
     if (props.useRef)
     {
         props.useRef(target);
@@ -30,7 +30,7 @@ html.append = <K extends HTMLElement>(target: K, children: (HTMLElement | SVGSVG
     return target;
 };
 
-export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps, children?: SVGElement[]) {
+export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElementTagNameMap[K]>, children?: SVGElement[]) {
     const element = svg.create(tagName);        
     if (props)
         svg.attr(element, props);
@@ -42,7 +42,7 @@ export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DO
 svg.create = <K extends keyof SVGElementTagNameMap>(tagName: K): SVGElementTagNameMap[K] =>
     document.createElementNS('http://www.w3.org/2000/svg', tagName);
 
-svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps): K => {
+svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps<K>): K => {
     if (props.useRef)
     {
         props.useRef(target);
