@@ -30,8 +30,8 @@ html.append = <K extends HTMLElement>(target: K, children: (HTMLElement | SVGSVG
     return target;
 };
 
-html.remove = <K extends HTMLElement>(target: K): void => {
-    target.parentElement?.removeChild(target);
+html.remove = <K extends HTMLElement, T extends HTMLElement | SVGSVGElement>(source: K, target: T): void => {
+    source.removeChild(target);
 };
 
 export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElementTagNameMap[K]>, children?: SVGElement[]) {
@@ -62,6 +62,6 @@ svg.append = <K extends SVGElement>(target: K, children: SVGElement[]): K => {
     return target;
 };
 
-svg.remove = <K extends SVGElement | HTMLElement>(target: K): void => {
-    target.parentElement?.removeChild(target);
+svg.remove = <K extends SVGElement, T extends SVGElement>(source: K, target: T): void => {
+    source.removeChild(target);
 };

@@ -20,8 +20,8 @@ html.append = (target, children) => {
     children.forEach(child => target.appendChild(child));
     return target;
 };
-html.remove = (target) => {
-    target.parentElement?.removeChild(target);
+html.remove = (source, target) => {
+    source.removeChild(target);
 };
 export function svg(tagName, props, children) {
     const element = svg.create(tagName);
@@ -45,6 +45,6 @@ svg.append = (target, children) => {
     children.forEach(child => target.appendChild(child));
     return target;
 };
-svg.remove = (target) => {
-    target.parentElement?.removeChild(target);
+svg.remove = (source, target) => {
+    source.removeChild(target);
 };
