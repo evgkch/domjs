@@ -1,6 +1,6 @@
 {
   "name": "domjs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "\"Create and manipulate html and svg elements by js\"",
   "main": "dist/index.js",
   "browser": "dist/index.js",

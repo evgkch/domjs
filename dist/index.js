@@ -16,8 +16,11 @@ html.attr = (target, props) => {
         target.setAttribute(key, props[key].toString());
     return target;
 };
-html.append = (target, children) => {
-    children.forEach(child => target.appendChild(child));
+html.append = (target, children, insertFirst = false) => {
+    if (!insertFirst)
+        children.forEach(child => target.appendChild(child));
+    else
+        children.forEach(child => target.firstChild && target.insertBefore(target.firstChild, child) || target.appendChild(child));
     return target;
 };
 html.remove = (source, target) => {
@@ -41,8 +44,11 @@ svg.attr = (target, props) => {
         target.setAttribute(key, props[key].toString());
     return target;
 };
-svg.append = (target, children) => {
-    children.forEach(child => target.appendChild(child));
+svg.append = (target, children, insertFirst = false) => {
+    if (!insertFirst)
+        children.forEach(child => target.appendChild(child));
+    else
+        children.forEach(child => target.firstChild && target.insertBefore(target.firstChild, child) || target.appendChild(child));
     return target;
 };
 svg.remove = (source, target) => {

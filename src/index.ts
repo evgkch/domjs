@@ -25,8 +25,11 @@ html.attr = <K extends HTMLElement>(target: K, props: DOMElementProps<K>): K => 
     return target;
 };
 
-html.append = <K extends HTMLElement>(target: K, children: (HTMLElement | SVGSVGElement)[]): K => {
-    children.forEach(child => target.appendChild(child));
+html.append = <K extends HTMLElement>(target: K, children: (HTMLElement | SVGSVGElement)[], insertFirst: boolean = false): K => {
+    if (!insertFirst)
+        children.forEach(child => target.appendChild(child));
+    else
+        children.forEach(child => target.firstChild && target.insertBefore(target.firstChild, child) || target.appendChild(child));
     return target;
 };
 
@@ -57,8 +60,11 @@ svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps<K>): K => {
     return target;
 };
 
-svg.append = <K extends SVGElement>(target: K, children: SVGElement[]): K => {
-    children.forEach(child => target.appendChild(child));
+svg.append = <K extends SVGElement>(target: K, children: SVGElement[], insertFirst: boolean = false): K => {
+    if (!insertFirst)
+        children.forEach(child => target.appendChild(child));
+    else
+        children.forEach(child => target.firstChild && target.insertBefore(target.firstChild, child) || target.appendChild(child));
     return target;
 };
 
