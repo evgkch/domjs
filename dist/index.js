@@ -20,7 +20,7 @@ html.append = (target, children, insertFirst = false) => {
     if (!insertFirst)
         children.forEach(child => target.appendChild(child));
     else
-        children.forEach(child => target.firstChild && target.insertBefore(target.firstChild, child) || target.appendChild(child));
+        children.forEach(child => target.firstChild && target.insertBefore(child, target.firstChild) || target.appendChild(child));
     return target;
 };
 html.remove = (source, target) => {
@@ -48,7 +48,7 @@ svg.append = (target, children, insertFirst = false) => {
     if (!insertFirst)
         children.forEach(child => target.appendChild(child));
     else
-        children.forEach(child => target.firstChild && target.insertBefore(target.firstChild, child) || target.appendChild(child));
+        children.forEach(child => target.firstChild && target.insertBefore(child, target.firstChild) || target.appendChild(child));
     return target;
 };
 svg.remove = (source, target) => {

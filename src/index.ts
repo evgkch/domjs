@@ -29,7 +29,7 @@ html.append = <K extends HTMLElement>(target: K, children: (HTMLElement | SVGSVG
     if (!insertFirst)
         children.forEach(child => target.appendChild(child));
     else
-        children.forEach(child => target.firstChild && target.insertBefore(target.firstChild, child) || target.appendChild(child));
+        children.forEach(child => target.firstChild && target.insertBefore(child, target.firstChild) || target.appendChild(child));
     return target;
 };
 
@@ -64,7 +64,7 @@ svg.append = <K extends SVGElement>(target: K, children: SVGElement[], insertFir
     if (!insertFirst)
         children.forEach(child => target.appendChild(child));
     else
-        children.forEach(child => target.firstChild && target.insertBefore(target.firstChild, child) || target.appendChild(child));
+        children.forEach(child => target.firstChild && target.insertBefore(child, target.firstChild) || target.appendChild(child));
     return target;
 };
 
