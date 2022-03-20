@@ -8,17 +8,21 @@ export function html(tagName, props, children) {
 }
 html.create = (tagName) => document.createElement(tagName);
 html.attr = (target, props) => {
-    if (props.setRef) {
-        props.setRef(target);
-        delete props.setRef;
+    if (props.useRef) {
+        props.useRef(target);
+        delete props.useRef;
     }
     for (let key in props)
-        target[key] = props[key];
+        target.setAttribute(key, props[key].toString());
     return target;
 };
 html.append = (target, children) => {
-    children.forEach(child => target.appendChild(child));
+    target.append(...children);
     return target;
+};
+html.remove = (source, target) => {
+    source.removeChild(target);
+    return source;
 };
 export function svg(tagName, props, children) {
     const element = svg.create(tagName);
@@ -30,15 +34,19 @@ export function svg(tagName, props, children) {
 }
 svg.create = (tagName) => document.createElementNS('http://www.w3.org/2000/svg', tagName);
 svg.attr = (target, props) => {
-    if (props.setRef) {
-        props.setRef(target);
-        delete props.setRef;
+    if (props.useRef) {
+        props.useRef(target);
+        delete props.useRef;
     }
     for (let key in props)
-        target[key] = props[key];
+        target.setAttribute(key, props[key].toString());
     return target;
 };
 svg.append = (target, children) => {
-    children.forEach(child => target.appendChild(child));
+    target.append(...children);
     return target;
+};
+svg.remove = (source, target) => {
+    source.removeChild(target);
+    return source;
 };
