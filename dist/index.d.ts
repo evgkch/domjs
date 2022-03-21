@@ -3,22 +3,14 @@ export declare type DOMElementProps<K> = {
 } & {
     [key in string]: any;
 };
-<<<<<<< HEAD
 export declare function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | null, children?: (HTMLElement | SVGSVGElement | Text)[]): HTMLElementTagNameMap[K];
-=======
-export declare function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K] | null>, children?: (HTMLElement | SVGSVGElement | Text)[]): HTMLElementTagNameMap[K];
->>>>>>> a7217182f425aa8fb4576463c5cad5e57aa776ce
 export declare namespace html {
     var create: <K extends keyof HTMLElementTagNameMap>(tagName: K) => HTMLElementTagNameMap[K];
     var attr: <K extends HTMLElement>(target: K, props: DOMElementProps<K> | null) => K;
     var append: <K extends HTMLElement>(target: K, children: (HTMLElement | SVGSVGElement | Text)[]) => K;
     var remove: <K extends HTMLElement, T extends HTMLElement | SVGSVGElement>(source: K, target: T) => K;
 }
-<<<<<<< HEAD
 export declare function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElementTagNameMap[K]> | null, children?: (SVGElement | Text)[]): SVGElementTagNameMap[K];
-=======
-export declare function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElementTagNameMap[K] | null>, children?: (SVGElement | Text)[]): SVGElementTagNameMap[K];
->>>>>>> a7217182f425aa8fb4576463c5cad5e57aa776ce
 export declare namespace svg {
     var create: <K extends keyof SVGElementTagNameMap>(tagName: K) => SVGElementTagNameMap[K];
     var attr: <K extends SVGElement>(target: K, props: DOMElementProps<K> | null) => K;
