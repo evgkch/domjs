@@ -8,7 +8,7 @@ export function html(tagName, props, children) {
 }
 html.create = (tagName) => document.createElement(tagName);
 html.attr = (target, props) => {
-    if (props.useRef) {
+    if (props?.useRef) {
         props.useRef(target);
         delete props.useRef;
     }
@@ -34,7 +34,7 @@ export function svg(tagName, props, children) {
 }
 svg.create = (tagName) => document.createElementNS('http://www.w3.org/2000/svg', tagName);
 svg.attr = (target, props) => {
-    if (props.useRef) {
+    if (props?.useRef) {
         props.useRef(target);
         delete props.useRef;
     }
