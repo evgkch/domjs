@@ -78,3 +78,7 @@ svg.remove = <K extends SVGElement, T extends SVGElement>(source: K, target: T):
 export function text(value: string): Text {
     return document.createTextNode(value);
 }
+
+export function list<T>(length: number, map: (i: number) => T): T[] {
+    return Array.from({ length }, (_, i) => map(i));
+}

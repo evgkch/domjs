@@ -24,4 +24,5 @@ export declare namespace svg {
     var remove: <K extends SVGElement, T extends SVGElement>(source: K, target: T) => K;
 }
 export declare function text(value: string): Text;
+export declare function list<T>(length: number, map: (i: number) => T): T[];
 export {};

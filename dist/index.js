@@ -53,3 +53,6 @@ svg.remove = (source, target) => {
 export function text(value) {
     return document.createTextNode(value);
 }
+export function list(length, map) {
+    return Array.from({ length }, (_, i) => map(i));
+}
