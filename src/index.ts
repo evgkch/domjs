@@ -2,7 +2,7 @@ export type DOMElementProps<K> =
     & { useRef?: (self: K) => any }
     & { [key in string]: any };
 
-export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]>, children?: (HTMLElement | SVGSVGElement | Text)[]) {
+export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | null, children?: (HTMLElement | SVGSVGElement | Text)[]) {
     const element = html.create(tagName);
     if (props)
         html.attr(element, props);
@@ -14,8 +14,8 @@ export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: 
 html.create = <K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K] =>
     document.createElement(tagName);
 
-html.attr = <K extends HTMLElement>(target: K, props: DOMElementProps<K>): K => {
-    if (props.useRef)
+html.attr = <K extends HTMLElement>(target: K, props: DOMElementProps<K> | null): K => {
+    if (props?.useRef)
     {
         props.useRef(target);
         delete props.useRef;
@@ -35,7 +35,7 @@ html.remove = <K extends HTMLElement, T extends HTMLElement | SVGSVGElement>(sou
     return source;
 };
 
-export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElementTagNameMap[K]>, children?: (SVGElement | Text)[]) {
+export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElementTagNameMap[K]> | null, children?: (SVGElement | Text)[]) {
     const element = svg.create(tagName);
     if (props)
         svg.attr(element, props);
@@ -47,8 +47,8 @@ export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DO
 svg.create = <K extends keyof SVGElementTagNameMap>(tagName: K): SVGElementTagNameMap[K] =>
     document.createElementNS('http://www.w3.org/2000/svg', tagName);
 
-svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps<K>): K => {
-    if (props.useRef)
+svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps<K> | null): K => {
+    if (props?.useRef)
     {
         props.useRef(target);
         delete props.useRef;
