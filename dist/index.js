@@ -1,3 +1,4 @@
+html('a', { useRef: self => self });
 export function html(tagName, props, children) {
     const element = html.create(tagName);
     if (props)

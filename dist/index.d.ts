@@ -7,7 +7,7 @@ export declare type DOMElementProps<K> = {
 } & {
     [Key in NonFunctionPropertyNames<K>]?: NonFunctionProperties<K>[Key];
 } & {
-    [Key in string]: string;
+    [Key in string]: any;
 };
 export declare function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | null, children?: (HTMLElement | SVGSVGElement | Text)[]): HTMLElementTagNameMap[K];
 export declare namespace html {
