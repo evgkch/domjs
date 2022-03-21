@@ -13,7 +13,7 @@ html.attr = (target, props) => {
         delete props.useRef;
     }
     for (let key in props)
-        target.setAttribute(key, props[key].toString());
+        target.setAttribute(key, props[key]);
     return target;
 };
 html.append = (target, children) => {
@@ -39,7 +39,7 @@ svg.attr = (target, props) => {
         delete props.useRef;
     }
     for (let key in props)
-        target.setAttribute(key, props[key].toString());
+        target.setAttribute(key, props[key]);
     return target;
 };
 svg.append = (target, children) => {

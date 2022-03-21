@@ -1,6 +1,13 @@
+type NonFunctionPropertyNames<T> = {
+    [K in keyof T]: T[K] extends Function ? never : K;
+}[keyof T];
+
+type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
+
 export type DOMElementProps<K> =
     & { useRef?: (self: K) => any }
-    & { [key in string]: any };
+    & { [Key in NonFunctionPropertyNames<K>]?: NonFunctionProperties<K>[Key] }
+    & { [Key in string]: string };
 
 export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | null, children?: (HTMLElement | SVGSVGElement | Text)[]) {
     const element = html.create(tagName);
@@ -21,7 +28,7 @@ html.attr = <K extends HTMLElement>(target: K, props: DOMElementProps<K> | null)
         delete props.useRef;
     }
     for (let key in props)
-        target.setAttribute(key, props[key].toString());
+        target.setAttribute(key, props[key]);
     return target;
 };
 
@@ -54,7 +61,7 @@ svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps<K> | null): 
         delete props.useRef;
     }
     for (let key in props)
-        target.setAttribute(key, props[key].toString());
+        target.setAttribute(key, props[key]);
     return target;
 };
 

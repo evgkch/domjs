@@ -1,7 +1,13 @@
+declare type NonFunctionPropertyNames<T> = {
+    [K in keyof T]: T[K] extends Function ? never : K;
+}[keyof T];
+declare type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
 export declare type DOMElementProps<K> = {
     useRef?: (self: K) => any;
 } & {
-    [key in string]: any;
+    [Key in NonFunctionPropertyNames<K>]?: NonFunctionProperties<K>[Key];
+} & {
+    [Key in string]: string;
 };
 export declare function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | null, children?: (HTMLElement | SVGSVGElement | Text)[]): HTMLElementTagNameMap[K];
 export declare namespace html {
@@ -18,3 +24,4 @@ export declare namespace svg {
     var remove: <K extends SVGElement, T extends SVGElement>(source: K, target: T) => K;
 }
 export declare function text(value: string): Text;
+export {};
