@@ -9,8 +9,6 @@ export type DOMElementProps<K> =
     & { [Key in NonFunctionPropertyNames<K>]?: NonFunctionProperties<K>[Key] }
     & { [Key in string]: any };
 
-html('a', { useRef: self => self })
-
 export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | null, children?: (HTMLElement | SVGSVGElement | Text)[]) {
     const element = html.create(tagName);
     if (props)
