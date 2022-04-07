@@ -1,5 +1,5 @@
 export declare type DOMElementProps<K> = {
-    [Key in keyof K]?: K[Extract<keyof K, string>];
+    [Key in keyof K]?: K[Key];
 };
 export declare function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | ((self: HTMLElementTagNameMap[K]) => DOMElementProps<HTMLElementTagNameMap[K]>) | null, children?: (HTMLElement | SVGSVGElement | Text)[] | ((self: HTMLElementTagNameMap[K]) => (HTMLElement | SVGSVGElement | Text)[])): HTMLElementTagNameMap[K];
 export declare namespace html {
