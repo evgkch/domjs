@@ -1,38 +1,19 @@
-class Ref {
-    constructor(use) {
-        this.use = use;
-    }
-}
-export function useRef(use) {
-    return new Ref(use);
-}
 export function html(tagName, props, children) {
     const element = html.create(tagName);
     if (props)
-        html.attr(element, props);
+        html.attr(element, props instanceof Function ? props(element) : props);
     if (children)
-        html.append(element, children);
+        html.append(element, children instanceof Function ? children(element) : children);
     return element;
 }
 html.create = (tagName) => document.createElement(tagName);
 html.attr = (target, props) => {
-    for (let key in props) {
-        const value = props[key];
-        if (value instanceof Ref)
-            target[key] = value.use(target);
-        else
-            target[key] = value;
-    }
+    for (let key in props)
+        target[key] = props[key];
     return target;
 };
 html.append = (target, children) => {
-    for (let i = 0; i < children.length; i++) {
-        const child = children[i];
-        if (child instanceof Ref)
-            target.append(...child.use(target));
-        else
-            target.appendChild(child);
-    }
+    target.append(...children);
     return target;
 };
 html.remove = (source, target) => {
@@ -42,30 +23,19 @@ html.remove = (source, target) => {
 export function svg(tagName, props, children) {
     const element = svg.create(tagName);
     if (props)
-        svg.attr(element, props);
+        svg.attr(element, props instanceof Function ? props(element) : props);
     if (children)
-        svg.append(element, children);
+        svg.append(element, children instanceof Function ? children(element) : children);
     return element;
 }
 svg.create = (tagName) => document.createElementNS('http://www.w3.org/2000/svg', tagName);
 svg.attr = (target, props) => {
-    for (let key in props) {
-        const value = props[key];
-        if (value instanceof Ref)
-            target[key] = value.use(target);
-        else
-            target[key] = value;
-    }
+    for (let key in props)
+        target[key] = props[key];
     return target;
 };
 svg.append = (target, children) => {
-    for (let i = 0; i < children.length; i++) {
-        const child = children[i];
-        if (child instanceof Ref)
-            target.append(...child.use(target));
-        else
-            target.appendChild(child);
-    }
+    target.append(...children);
     return target;
 };
 svg.remove = (source, target) => {
@@ -74,7 +44,4 @@ svg.remove = (source, target) => {
 };
 export function text(value) {
     return document.createTextNode(value);
-}
-export function list(length, map) {
-    return Array.from({ length }, (_, i) => map(i));
 }
