@@ -1,4 +1,14 @@
-export type DOMElementProps<K> = { [Key in keyof K]?: K[Key] };
+type IfEquals<X, Y, A, B> =
+    (<T>() => T extends X ? 1 : 2) extends
+    (<T>() => T extends Y ? 1 : 2) ? A : B;
+
+export type WritableKeysOf<T> = {
+    [P in keyof T]: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, P, never>
+}[keyof T];
+
+export type WritablePart<T> = Pick<T, WritableKeysOf<T>>;
+
+export type DOMElementProps<K extends HTMLElement | SVGElement | Text> = Partial<WritablePart<K>>;
 
 export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | ((self: HTMLElementTagNameMap[K]) => DOMElementProps<HTMLElementTagNameMap[K]>) | null, children?: (HTMLElement | SVGSVGElement | Text)[] | ((self: HTMLElementTagNameMap[K]) => (HTMLElement | SVGSVGElement | Text)[])) {
     const element = html.create(tagName);
@@ -12,9 +22,10 @@ export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: 
 html.create = <K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K] =>
     document.createElement(tagName);
 
-html.attr = <K extends HTMLElement>(target: K, props: DOMElementProps<K>): K => {
+html.attr = <K extends HTMLElement | SVGElement | Text>(target: K, props: DOMElementProps<K>): K => {
     for (let key in props)
-        target[key] = props[key] as K[Extract<keyof K, string>];
+        // @ts-ignore
+        target[key] = props[key];
     return target;
 };
 
@@ -42,7 +53,8 @@ svg.create = <K extends keyof SVGElementTagNameMap>(tagName: K): SVGElementTagNa
 
 svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps<K>): K => {
     for (let key in props)
-        target[key] = props[key] as K[Extract<keyof K, string>];
+        // @ts-ignore
+        target[key] = props[key];
     return target;
 };
 
