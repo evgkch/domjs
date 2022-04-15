@@ -1,3 +1,9 @@
+export function isListener(key) {
+    return key.startsWith('on');
+}
+export function text(value) {
+    return document.createTextNode(value);
+}
 export function html(tagName, props, children) {
     const element = html.create(tagName);
     if (props)
@@ -8,8 +14,12 @@ export function html(tagName, props, children) {
 }
 html.create = (tagName) => document.createElement(tagName);
 html.attr = (target, props) => {
-    for (let key in props)
-        target[key] = props[key];
+    for (let key in props) {
+        if (isListener(key))
+            target[key] = props[key];
+        else
+            target.setAttribute(key, props[key]);
+    }
     return target;
 };
 html.append = (target, children) => {
@@ -30,8 +40,12 @@ export function svg(tagName, props, children) {
 }
 svg.create = (tagName) => document.createElementNS('http://www.w3.org/2000/svg', tagName);
 svg.attr = (target, props) => {
-    for (let key in props)
-        target[key] = props[key];
+    for (let key in props) {
+        if (isListener(key))
+            target[key] = props[key];
+        else
+            target.setAttribute(key, props[key]);
+    }
     return target;
 };
 svg.append = (target, children) => {
@@ -42,6 +56,3 @@ svg.remove = (source, target) => {
     source.removeChild(target);
     return source;
 };
-export function text(value) {
-    return document.createTextNode(value);
-}

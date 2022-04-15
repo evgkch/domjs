@@ -10,6 +10,14 @@ export type WritablePart<T> = Pick<T, WritableKeysOf<T>>;
 
 export type DOMElementProps<K extends HTMLElement | SVGElement | Text> = Partial<WritablePart<K>>;
 
+export function isListener(key: string) {
+    return key.startsWith('on');
+}
+
+export function text(value: string): Text {
+    return document.createTextNode(value);
+}
+
 export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | ((self: HTMLElementTagNameMap[K]) => DOMElementProps<HTMLElementTagNameMap[K]>) | null, children?: (HTMLElement | SVGSVGElement | Text)[] | ((self: HTMLElementTagNameMap[K]) => (HTMLElement | SVGSVGElement | Text)[])) {
     const element = html.create(tagName);
     if (props)
@@ -22,10 +30,17 @@ export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: 
 html.create = <K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K] =>
     document.createElement(tagName);
 
-html.attr = <K extends HTMLElement | SVGElement | Text>(target: K, props: DOMElementProps<K>): K => {
+html.attr = <K extends HTMLElement>(target: K, props: DOMElementProps<K>): K => {
     for (let key in props)
-        // @ts-ignore
-        target[key] = props[key];
+    {
+        if (isListener(key))
+            // @ts-ignore
+            target[key] = props[key];
+        else
+            // @ts-ignore
+            target.setAttribute(key, props[key]);
+    }
+
     return target;
 };
 
@@ -53,8 +68,14 @@ svg.create = <K extends keyof SVGElementTagNameMap>(tagName: K): SVGElementTagNa
 
 svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps<K>): K => {
     for (let key in props)
-        // @ts-ignore
-        target[key] = props[key];
+    {
+        if (isListener(key))
+            // @ts-ignore
+            target[key] = props[key];
+        else
+            // @ts-ignore
+            target.setAttribute(key, props[key]);
+    }
     return target;
 };
 
@@ -67,7 +88,3 @@ svg.remove = <K extends SVGElement, T extends SVGElement>(source: K, target: T):
     source.removeChild(target);
     return source;
 };
-
-export function text(value: string): Text {
-    return document.createTextNode(value);
-}
