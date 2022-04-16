@@ -8,7 +8,7 @@ export declare type WritableKeysOf<T> = {
 }[keyof T];
 export declare type WritablePart<T> = Pick<T, WritableKeysOf<T>>;
 export declare type DOMElementProps<T extends HTMLElement | SVGElement> = Partial<WritablePart<T>> & {
-    useRef: (self: T) => void;
+    useRef?: (self: T) => void;
 };
 export declare function isListener(key: string): boolean;
 export declare function isRef(key: string): boolean;

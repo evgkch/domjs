@@ -8,7 +8,7 @@ export type WritableKeysOf<T> = {
 
 export type WritablePart<T> = Pick<T, WritableKeysOf<T>>;
 
-export type DOMElementProps<T extends HTMLElement | SVGElement> = Partial<WritablePart<T>> & { useRef: (self: T) => void };
+export type DOMElementProps<T extends HTMLElement | SVGElement> = Partial<WritablePart<T>> & { useRef?: (self: T) => void };
 
 export function isListener(key: string) {
     return key.startsWith('on');
