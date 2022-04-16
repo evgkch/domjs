@@ -18,6 +18,22 @@ export function isRef(key: string) {
     return key === 'useRef';
 }
 
+export function attr<K extends HTMLElement | SVGElement>(target: K, props: DOMElementProps<K>): K {
+    for (let key in props)
+    {
+        if (isListener(key))
+            // @ts-ignore
+            target[key] = props[key];
+        else if (isRef(key))
+            // @ts-ignore
+            props[key](target);
+        else
+            // @ts-ignore
+            target.setAttribute(key, props[key]);
+    }
+    return target;
+};
+
 export function text(value: string): Text {
     return document.createTextNode(value);
 }
@@ -34,22 +50,7 @@ export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: 
 html.create = <K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K] =>
     document.createElement(tagName);
 
-html.attr = <K extends HTMLElement>(target: K, props: DOMElementProps<K>): K => {
-    for (let key in props)
-    {
-        if (isListener(key))
-            // @ts-ignore
-            target[key] = props[key];
-        else if (isRef(key))
-            // @ts-ignore
-            props[key](target);
-        else
-            // @ts-ignore
-            target.setAttribute(key, props[key]);
-    }
-
-    return target;
-};
+html.attr = attr;
 
 html.append = <K extends HTMLElement>(target: K, children: (HTMLElement | SVGSVGElement | Text)[]): K => {
     target.append(...children);
@@ -73,21 +74,7 @@ export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DO
 svg.create = <K extends keyof SVGElementTagNameMap>(tagName: K): SVGElementTagNameMap[K] =>
     document.createElementNS('http://www.w3.org/2000/svg', tagName);
 
-svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps<K>): K => {
-    for (let key in props)
-    {
-        if (isListener(key))
-            // @ts-ignore
-            target[key] = props[key];
-        else if (isRef(key))
-            // @ts-ignore
-            props[key](target);
-        else
-            // @ts-ignore
-            target.setAttribute(key, props[key]);
-    }
-    return target;
-};
+svg.attr = attr;
 
 svg.append = <K extends SVGElement>(target: K, children: (SVGElement | Text)[]): K => {
     target.append(...children);
