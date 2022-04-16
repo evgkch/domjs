@@ -8,20 +8,24 @@ export type WritableKeysOf<T> = {
 
 export type WritablePart<T> = Pick<T, WritableKeysOf<T>>;
 
-export type DOMElementProps<K extends HTMLElement | SVGElement | Text> = Partial<WritablePart<K>>;
+export type DOMElementProps<T extends HTMLElement | SVGElement> = Partial<WritablePart<T>> & { useRef: (self: T) => void };
 
 export function isListener(key: string) {
     return key.startsWith('on');
+}
+
+export function isRef(key: string) {
+    return key === 'useRef';
 }
 
 export function text(value: string): Text {
     return document.createTextNode(value);
 }
 
-export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | ((self: HTMLElementTagNameMap[K]) => DOMElementProps<HTMLElementTagNameMap[K]>) | null, children?: (HTMLElement | SVGSVGElement | Text)[] | ((self: HTMLElementTagNameMap[K]) => (HTMLElement | SVGSVGElement | Text)[])) {
+export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | null, children?: (HTMLElement | SVGSVGElement | Text)[] | ((self: HTMLElementTagNameMap[K]) => (HTMLElement | SVGSVGElement | Text)[])) {
     const element = html.create(tagName);
     if (props)
-        html.attr(element, props instanceof Function ? props(element) : props);
+        html.attr(element, props);
     if (children)
         html.append(element, children instanceof Function ? children(element) : children);
     return element;
@@ -36,6 +40,9 @@ html.attr = <K extends HTMLElement>(target: K, props: DOMElementProps<K>): K => 
         if (isListener(key))
             // @ts-ignore
             target[key] = props[key];
+        else if (isRef(key))
+            // @ts-ignore
+            props[key](target);
         else
             // @ts-ignore
             target.setAttribute(key, props[key]);
@@ -54,10 +61,10 @@ html.remove = <K extends HTMLElement, T extends HTMLElement | SVGSVGElement>(sou
     return source;
 };
 
-export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElementTagNameMap[K]> | ((self: SVGElementTagNameMap[K]) => DOMElementProps<SVGElementTagNameMap[K]>) | null, children?: (SVGElement | Text)[] | ((self: SVGElementTagNameMap[K]) => (SVGElement | Text)[])) {
+export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElementTagNameMap[K]> | null, children?: (SVGElement | Text)[] | ((self: SVGElementTagNameMap[K]) => (SVGElement | Text)[])) {
     const element = svg.create(tagName);
     if (props)
-        svg.attr(element, props instanceof Function ? props(element) : props);
+        svg.attr(element, props);
     if (children)
         svg.append(element, children instanceof Function ? children(element) : children);
     return element;
@@ -72,6 +79,9 @@ svg.attr = <K extends SVGElement>(target: K, props: DOMElementProps<K>): K => {
         if (isListener(key))
             // @ts-ignore
             target[key] = props[key];
+        else if (isRef(key))
+            // @ts-ignore
+            props[key](target);
         else
             // @ts-ignore
             target.setAttribute(key, props[key]);
