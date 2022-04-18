@@ -4,18 +4,6 @@ export function isListener(key) {
 export function isRef(key) {
     return key === 'useRef';
 }
-export function attr(target, props) {
-    for (let key in props) {
-        if (isListener(key))
-            target[key] = props[key];
-        else if (isRef(key))
-            props[key](target);
-        else
-            target.setAttribute(key, props[key]);
-    }
-    return target;
-}
-;
 export function append(target, children) {
     for (let i = 0, length = children.length; i < length; i++) {
         if (children[i] instanceof Function)
@@ -38,7 +26,17 @@ export function html(tagName, props, children) {
     return element;
 }
 html.create = (tagName) => document.createElement(tagName);
-html.attr = attr;
+html.attr = (target, props) => {
+    for (let key in props) {
+        if (isListener(key))
+            target[key] = props[key];
+        else if (isRef(key))
+            props[key](target);
+        else
+            target.setAttribute(key, props[key]);
+    }
+    return target;
+};
 html.append = append;
 html.remove = (source, target) => {
     source.removeChild(target);
@@ -53,7 +51,17 @@ export function svg(tagName, props, children) {
     return element;
 }
 svg.create = (tagName) => document.createElementNS('http://www.w3.org/2000/svg', tagName);
-svg.attr = attr;
+svg.attr = (target, props) => {
+    for (let key in props) {
+        if (isListener(key))
+            target[key] = props[key];
+        else if (isRef(key))
+            props[key](target);
+        else
+            target.setAttribute(key, props[key]);
+    }
+    return target;
+};
 svg.append = append;
 svg.remove = (source, target) => {
     source.removeChild(target);
