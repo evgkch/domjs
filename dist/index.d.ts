@@ -8,7 +8,7 @@ export declare type WritableKeysOf<T> = {
 }[keyof T];
 export declare type WritablePart<T> = Pick<T, WritableKeysOf<T>>;
 export declare type DOMElementProps<T extends HTMLElement | SVGElement> = {
-    [Key in WritableKeysOf<T>]: T[Key] extends Function ? T[Key] : T[Key] | string | number | boolean;
+    [Key in WritableKeysOf<T>]?: T[Key] extends Function ? T[Key] : T[Key] | string | number | boolean;
 } & {
     useRef?: (self: T) => void;
 };
