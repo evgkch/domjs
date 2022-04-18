@@ -8,7 +8,7 @@ export type WritableKeysOf<T> = {
 
 export type WritablePart<T> = Pick<T, WritableKeysOf<T>>;
 
-export type DOMElementProps<T extends HTMLElement | SVGElement> = Partial<WritablePart<T>> & { useRef?: (self: T) => void };
+export type DOMElementProps<T extends HTMLElement | SVGElement> = { [Key in WritableKeysOf<T>]: T[Key] extends Function ? T[Key] : T[Key] | string | number | boolean } & { useRef?: (self: T) => void };
 
 export type DOMChild<T extends HTMLElement | SVGElement> = T extends HTMLElement
     ? HTMLElement | SVGSVGElement | Text
