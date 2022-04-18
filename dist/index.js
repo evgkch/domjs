@@ -16,6 +16,16 @@ export function attr(target, props) {
     return target;
 }
 ;
+export function append(target, children) {
+    for (let i = 0, length = children.length; i < length; i++) {
+        if (children[i] instanceof Function)
+            target.appendChild(children[i](target, i));
+        else
+            target.appendChild(children[i]);
+    }
+    return target;
+}
+;
 export function text(value) {
     return document.createTextNode(value);
 }
@@ -29,10 +39,7 @@ export function html(tagName, props, children) {
 }
 html.create = (tagName) => document.createElement(tagName);
 html.attr = attr;
-html.append = (target, children) => {
-    target.append(...children);
-    return target;
-};
+html.append = append;
 html.remove = (source, target) => {
     source.removeChild(target);
     return source;
@@ -47,10 +54,7 @@ export function svg(tagName, props, children) {
 }
 svg.create = (tagName) => document.createElementNS('http://www.w3.org/2000/svg', tagName);
 svg.attr = attr;
-svg.append = (target, children) => {
-    target.append(...children);
-    return target;
-};
+svg.append = append;
 svg.remove = (source, target) => {
     source.removeChild(target);
     return source;

@@ -10,6 +10,10 @@ export type WritablePart<T> = Pick<T, WritableKeysOf<T>>;
 
 export type DOMElementProps<T extends HTMLElement | SVGElement> = Partial<WritablePart<T>> & { useRef?: (self: T) => void };
 
+export type DOMChild<T extends HTMLElement | SVGElement> = T extends HTMLElement
+    ? HTMLElement | SVGSVGElement | Text
+    : SVGElement | Text;
+
 export function isListener(key: string) {
     return key.startsWith('on');
 }
@@ -34,11 +38,22 @@ export function attr<K extends HTMLElement | SVGElement>(target: K, props: DOMEl
     return target;
 };
 
+export function append<K extends HTMLElement | SVGElement>(target: K, children: (DOMChild<K> | ((self: K, i: number) => DOMChild<K>))[]): K {
+    for (let i = 0, length = children.length; i < length; i++)
+    {
+        if (children[i] instanceof Function)
+            target.appendChild((children[i] as Function)(target, i));
+        else
+            target.appendChild(children[i] as DOMChild<K>);
+    }
+    return target;
+};
+
 export function text(value: string): Text {
     return document.createTextNode(value);
 }
 
-export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | null, children?: (HTMLElement | SVGSVGElement | Text)[] | ((self: HTMLElementTagNameMap[K]) => (HTMLElement | SVGSVGElement | Text)[])) {
+export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: DOMElementProps<HTMLElementTagNameMap[K]> | null, children?: ((HTMLElement | SVGSVGElement | Text) | ((self: HTMLElementTagNameMap[K], i: number) => (HTMLElement | SVGSVGElement | Text)))[]) {
     const element = html.create(tagName);
     if (props)
         html.attr(element, props);
@@ -52,17 +67,14 @@ html.create = <K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTa
 
 html.attr = attr;
 
-html.append = <K extends HTMLElement>(target: K, children: (HTMLElement | SVGSVGElement | Text)[]): K => {
-    target.append(...children);
-    return target;
-};
+html.append = append;
 
 html.remove = <K extends HTMLElement, T extends HTMLElement | SVGSVGElement>(source: K, target: T): K => {
     source.removeChild(target);
     return source;
 };
 
-export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElementTagNameMap[K]> | null, children?: (SVGElement | Text)[] | ((self: SVGElementTagNameMap[K]) => (SVGElement | Text)[])) {
+export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: DOMElementProps<SVGElementTagNameMap[K]> | null, children?: ((SVGElement | Text) | ((self: SVGElementTagNameMap[K]) => (SVGElement | Text)))[]) {
     const element = svg.create(tagName);
     if (props)
         svg.attr(element, props);
@@ -76,10 +88,7 @@ svg.create = <K extends keyof SVGElementTagNameMap>(tagName: K): SVGElementTagNa
 
 svg.attr = attr;
 
-svg.append = <K extends SVGElement>(target: K, children: (SVGElement | Text)[]): K => {
-    target.append(...children);
-    return target;
-};
+svg.append = append;
 
 svg.remove = <K extends SVGElement, T extends SVGElement>(source: K, target: T): K => {
     source.removeChild(target);
