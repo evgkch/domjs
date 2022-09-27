@@ -1,6 +1,6 @@
 {
   "name": "domjs",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "\"Create and manipulate html and svg elements by js\"",
   "main": "dist/index.js",
   "browser": "dist/index.js",
@@ -19,7 +19,8 @@
     "dom",
     "domjs",
     "html",
-    "svg"
+    "svg",
+    "css"
   ],
   "author": "Evgeny Kucherenko <evg.kch@gmail.com>",
   "license": "MIT",

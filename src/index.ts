@@ -6,7 +6,8 @@ export type WritableKeysOf<T> = {
     [P in keyof T]: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, P, never>
 }[keyof T];
 
-type ElementProps<T extends Object> = Partial<{ [K in WritableKeysOf<T>]: T[K] }>
+type ExcludeFunc<T extends Object> = { [K in keyof T as T[K] extends Function ? never : K]: T[K] };
+type ElementProps<T extends Object> = Partial<ExcludeFunc<{ [K in WritableKeysOf<T>]: T[K] }>>;
 
 export type HTMLElementProps<T extends HTMLElement> = ElementProps<T>;
 export type SVGElementProps<T extends SVGElement> = ElementProps<T>;
@@ -97,3 +98,9 @@ svg.remove = <K extends SVGElement, T extends SVGElement>(source: K, target: T):
     source.removeChild(target);
     return source;
 };
+
+export function css<K extends HTMLElement | SVGElement>(source: K, props: ElementProps<CSSStyleDeclaration>) {
+    for (let key in props) {
+        source.style.setProperty(key, props[key] || null);
+    }
+}

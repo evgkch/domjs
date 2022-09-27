@@ -60,3 +60,8 @@ svg.remove = (source, target) => {
     source.removeChild(target);
     return source;
 };
+export function css(source, props) {
+    for (let key in props) {
+        source.style.setProperty(key, props[key] || null);
+    }
+}
