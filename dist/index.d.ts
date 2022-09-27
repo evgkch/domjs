@@ -32,5 +32,5 @@ export declare namespace svg {
     var append: typeof import(".").append;
     var remove: <K extends SVGElement, T extends SVGElement>(source: K, target: T) => K;
 }
-export declare function css<K extends HTMLElement | SVGElement>(source: K, props: ElementProps<CSSStyleDeclaration>): void;
+export declare function css<K extends HTMLElement | SVGElement>(source: K, props: ElementProps<CSSStyleDeclaration>): null;
 export {};

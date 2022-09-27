@@ -101,6 +101,8 @@ svg.remove = <K extends SVGElement, T extends SVGElement>(source: K, target: T):
 
 export function css<K extends HTMLElement | SVGElement>(source: K, props: ElementProps<CSSStyleDeclaration>) {
     for (let key in props) {
-        source.style.setProperty(key, props[key] || null);
+        // @ts-ignore
+        source.style[key] = props[key];
     }
+    return null;
 }
