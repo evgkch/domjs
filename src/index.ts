@@ -9,8 +9,8 @@ export type WritableKeysOf<T> = {
 type ExcludeFunc<T extends Object> = { [K in keyof T as T[K] extends Function ? never : K]: T[K] };
 type ElementProps<T extends Object> = Partial<ExcludeFunc<{ [K in WritableKeysOf<T>]: T[K] }>>;
 
-export type HTMLElementProps<T extends HTMLElement> = ElementProps<T>;
-export type SVGElementProps<T extends SVGElement> = ElementProps<T>;
+export type HTMLElementProps<T extends HTMLElement> = ElementProps<T> | null;
+export type SVGElementProps<T extends SVGElement> = ElementProps<T> | null;
 
 export type DOMChild<T extends HTMLElement | SVGElement> = T extends HTMLElement
     ? HTMLElement | SVGSVGElement | Text
@@ -35,7 +35,7 @@ export function text(value: string): Text {
     return document.createTextNode(value);
 }
 
-export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: HTMLElementProps<HTMLElementTagNameMap[K]> | ((parent: HTMLElementTagNameMap[K]) => HTMLElementProps<HTMLElementTagNameMap[K]>) | null, children?: (DOMChild<HTMLElementTagNameMap[K]> | ((self: HTMLElementTagNameMap[K], i: number) => DOMChild<HTMLElementTagNameMap[K]>))[]) {
+export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: HTMLElementProps<HTMLElementTagNameMap[K]> | ((parent: HTMLElementTagNameMap[K]) => HTMLElementProps<HTMLElementTagNameMap[K]> | null) | null, children?: (DOMChild<HTMLElementTagNameMap[K]> | ((self: HTMLElementTagNameMap[K], i: number) => DOMChild<HTMLElementTagNameMap[K]>))[]) {
     const element = html.create(tagName);
     if (props)
         html.attr(element, props instanceof Function ? props(element) : props);
@@ -67,7 +67,7 @@ html.remove = <K extends HTMLElement, T extends HTMLElement | SVGSVGElement>(sou
     return source;
 };
 
-export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: SVGElementProps<SVGElementTagNameMap[K]> | ((parent: SVGElementTagNameMap[K]) => SVGElementProps<SVGElementTagNameMap[K]>) | null, children?: (DOMChild<SVGElementTagNameMap[K]> | ((self: SVGElementTagNameMap[K], i: number) => DOMChild<SVGElementTagNameMap[K]>))[]) {
+export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: SVGElementProps<SVGElementTagNameMap[K]> | ((parent: SVGElementTagNameMap[K]) => SVGElementProps<SVGElementTagNameMap[K]> | null) | null, children?: (DOMChild<SVGElementTagNameMap[K]> | ((self: SVGElementTagNameMap[K], i: number) => DOMChild<SVGElementTagNameMap[K]>))[]) {
     const element = svg.create(tagName);
     if (props)
         svg.attr(element, props instanceof Function ? props(element) : props);
