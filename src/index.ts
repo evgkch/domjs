@@ -20,18 +20,18 @@ export function isListener(key: string) {
     return key.startsWith('on');
 }
 
-export function append<K extends ParentNode>(target: K, children: ChildNode[] | ((parent: K) => ChildNode[])) {
+export function append<K extends HTMLElement | SVGElement>(target: K, children: DOMChild<K>[] | ((parent: K) => DOMChild<K>[])) {
     if (children instanceof Function)
         target.append((children as Function)(target));
     else
-        target.append(...children);
+        target.append.call(children);
 };
 
 export function text(value: string): Text {
     return document.createTextNode(value);
 }
 
-export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: HTMLElementProps<HTMLElementTagNameMap[K]> | ((parent: HTMLElementTagNameMap[K]) => HTMLElementProps<HTMLElementTagNameMap[K]> | null) | null, children?: ChildNode[] | ((parent: HTMLElementTagNameMap[K]) => ChildNode[])) {
+export function html<K extends keyof HTMLElementTagNameMap>(tagName: K, props?: HTMLElementProps<HTMLElementTagNameMap[K]> | ((parent: HTMLElementTagNameMap[K]) => HTMLElementProps<HTMLElementTagNameMap[K]> | null) | null, children?: DOMChild<HTMLElementTagNameMap[K]>[] | ((parent: HTMLElementTagNameMap[K]) => DOMChild<HTMLElementTagNameMap[K]>[])) {
     const element = html.create(tagName);
     if (props)
         html.attr(element, props instanceof Function ? props(element) : props);
@@ -63,7 +63,7 @@ html.remove = <K extends HTMLElement, T extends HTMLElement | SVGSVGElement>(sou
     return source;
 };
 
-export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: SVGElementProps<SVGElementTagNameMap[K]> | ((parent: SVGElementTagNameMap[K]) => SVGElementProps<SVGElementTagNameMap[K]> | null) | null, children?: ChildNode[] | ((parent: SVGElementTagNameMap[K]) => ChildNode[])) {
+export function svg<K extends keyof SVGElementTagNameMap>(tagName: K, props?: SVGElementProps<SVGElementTagNameMap[K]> | ((parent: SVGElementTagNameMap[K]) => SVGElementProps<SVGElementTagNameMap[K]> | null) | null, children?: DOMChild<SVGElementTagNameMap[K]>[] | ((parent: SVGElementTagNameMap[K]) => DOMChild<SVGElementTagNameMap[K]>[])) {
     const element = svg.create(tagName);
     if (props)
         svg.attr(element, props instanceof Function ? props(element) : props);

@@ -5,7 +5,7 @@ export function append(target, children) {
     if (children instanceof Function)
         target.append(children(target));
     else
-        target.append(...children);
+        target.append.call(children);
 }
 ;
 export function text(value) {
