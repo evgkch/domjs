@@ -2,13 +2,10 @@ export function isListener(key) {
     return key.startsWith('on');
 }
 export function append(target, children) {
-    for (let i = 0, length = children.length; i < length; i++) {
-        if (children[i] instanceof Function)
-            target.appendChild(children[i](target, i));
-        else
-            target.appendChild(children[i]);
-    }
-    return target;
+    if (children instanceof Function)
+        target.append(children(target));
+    else
+        target.append(...children);
 }
 ;
 export function text(value) {
