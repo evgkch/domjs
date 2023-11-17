@@ -3,9 +3,9 @@ export function isListener(key) {
 }
 export function append(target, children) {
     if (children instanceof Function)
-        target.append(children(target));
+        target.append(...children(target));
     else
-        target.append.call(children);
+        target.append(...children);
 }
 ;
 export function text(value) {
