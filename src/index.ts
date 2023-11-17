@@ -22,9 +22,9 @@ export function isListener(key: string) {
 
 export function append<K extends HTMLElement | SVGElement>(target: K, children: DOMChild<K>[] | ((parent: K) => DOMChild<K>[])) {
     if (children instanceof Function)
-        target.append((children as Function)(target));
+        target.append(...(children as Function)(target));
     else
-        target.append.call(children);
+        target.append(...children);
 };
 
 export function text(value: string): Text {
